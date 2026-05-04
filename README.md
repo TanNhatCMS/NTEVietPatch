@@ -11,7 +11,7 @@ Công cụ cài đặt bản Việt hoá không chính thức cho game **Neverne
 - Game **Neverness to Everness** (CN hoặc Global) đã cài đặt
 - **Hệ điều hành**: Windows 10/11 64-bit (Đã hỗ trợ bản 1.0.0)
 - **Linux / Steam Deck**: Sắp ra mắt (Coming soon)
-- Python 3.10+ *(nếu chạy từ source)*
+- Python 3.10+ _(nếu chạy từ source)_
 
 ---
 
@@ -46,7 +46,7 @@ viet_font.ttf
 <vị trí cài game>\Neverness To Everness\Client\WindowsNoEditor\HT\Binaries\Win64\
 ```
 
-> 💡 **Gợi ý:** Click chuột phải vào shortcut game → *Mở vị trí file* → vào tiếp `Binaries\Win64\`
+> 💡 **Gợi ý:** Click chuột phải vào shortcut game → _Mở vị trí file_ → vào tiếp `Binaries\Win64\`
 
 Đây là thư mục chứa `HTGame.exe`.
 
@@ -85,7 +85,7 @@ viet_font.ttf
 ## Cài đặt Linux / Proton
 
 Trên Linux, dùng `version.dll` thay vì `netbios.dll`.  
-Chọn **Linux / Proton — version.dll** trong tab **⚙ Cài đặt** của tool trước khi cài patch.
+Chọn **Linux / Proton — version.dll**.
 
 ---
 
