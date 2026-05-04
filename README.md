@@ -102,16 +102,14 @@ NTEVietPatch/
 └── backup/           # Thư mục chứa các bản sao lưu
 ```
 
-## Môi trường Lập trình viên (Dev)
-
-Nếu bạn muốn đóng góp code hoặc tự build lại ứng dụng, hãy sử dụng các file `.bat` đã được chuẩn bị sẵn:
+Nếu bạn muốn đóng góp code hoặc tự build lại ứng dụng, hãy sử dụng các file `.ps1` đã được chuẩn bị sẵn:
 
 1. **Cài đặt môi trường:**
-   Chạy file `setup_dev.bat` để tạo môi trường ảo `.venv` và cài đặt `PyInstaller`.
+   Chạy file `.\setup.ps1` để tạo môi trường ảo `.venv` và cài đặt dependencies.
 2. **Chạy test giao diện:**
-   Chạy file `run_dev.bat` để mở app bằng Python mà không cần build thành EXE (tiện cho việc sửa code và xem kết quả ngay).
+   Chạy file `.\run.ps1` để mở app bằng Python mà không cần build thành EXE.
 3. **Đóng gói EXE:**
-   Chạy file `build.bat` để dọn dẹp cache cũ và tự động build ra file EXE mới trong thư mục `dist\`.
+   Chạy file `.\build.ps1` để dọn dẹp cache cũ và tự động build ra file EXE mới trong thư mục `dist\`.
 
 > ⚠ **Yêu cầu**: Python phải có **Tkinter** (bản từ [python.org](https://www.python.org/downloads/) hoặc `uv`-managed CPython).  
 > Một số bản Python stripped (FlyEnv, conda minimal, v.v.) không có Tkinter và sẽ báo lỗi.
