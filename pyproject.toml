@@ -1,0 +1,18 @@
+[project]
+name = "ntevietpatch"
+version = "1.0.0"
+description = "NTEVietPatch - Cong cu Viet hoa tu dong cho game Neverness to Everness"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pyinstaller>=6.0",
+    "pyside6>=6.11.0",
+    "PyGithub",
+]
+
+[project.scripts]
+ntevietpatch = "main:main"
+nte = "main:main"
+
+[tool.setuptools]
+py-modules = ["main", "gui", "file_patcher", "github_loader"]
