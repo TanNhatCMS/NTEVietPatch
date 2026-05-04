@@ -111,9 +111,6 @@ Nếu bạn muốn đóng góp code hoặc tự build lại ứng dụng, hãy s
 3. **Đóng gói EXE:**
    Chạy file `.\build.ps1` để dọn dẹp cache cũ và tự động build ra file EXE mới trong thư mục `dist\`.
 
-> ⚠ **Yêu cầu**: Python phải có **Tkinter** (bản từ [python.org](https://www.python.org/downloads/) hoặc `uv`-managed CPython).  
-> Một số bản Python stripped (FlyEnv, conda minimal, v.v.) không có Tkinter và sẽ báo lỗi.
-
 ## Bản quyền
 
 MIT License
