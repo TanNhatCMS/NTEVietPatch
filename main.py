@@ -8,6 +8,7 @@ import json
 import os
 import sys
 import threading
+import datetime
 from pathlib import Path
 
 from file_patcher import FilePatcher
@@ -48,7 +49,19 @@ class App:
         self._latest_release: dict | None = None
         
     def _log(self, message: str) -> None:
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        log_entry = f"[{timestamp}] {message}"
+        
+        # Print to console/GUI
         self._log_fn(message)
+        
+        # Write to file
+        try:
+            log_file = BASE_DIR / "app.log"
+            with open(log_file, "a", encoding="utf-8") as f:
+                f.write(log_entry + "\n")
+        except Exception:
+            pass
 
     def set_log_fn(self, fn) -> None:
         self._log_fn = fn

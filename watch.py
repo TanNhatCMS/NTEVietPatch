@@ -10,7 +10,7 @@ def get_mtimes():
         if ".venv" in root or "__pycache__" in root:
             continue
         for f in files:
-            if f.endswith(".py") and f != "watch.py":
+            if (f.endswith(".py") or f.endswith(".css")) and f != "watch.py":
                 p = os.path.join(root, f)
                 try:
                     mtimes[p] = os.stat(p).st_mtime

@@ -13,7 +13,7 @@ import datetime
 import os
 import shutil
 import json
-import winreg
+# winreg imported conditionally in methods
 from pathlib import Path
 from typing import Optional
 
@@ -23,6 +23,14 @@ _GAME_FOLDER_NAMES = [
     "Neverness To Everness",
     "NevernessTOEverness",
     "Neverness to Everness",
+]
+
+# Common Linux game paths
+_LINUX_GAME_PATHS = [
+    "~/Games",
+    "~/Lutris",
+    "~/.wine/drive_c/Program Files",
+    "~/.wine/drive_c/Program Files (x86)",
 ]
 
 
@@ -99,17 +107,19 @@ class FilePatcher:
             self._log(f"✔ Tìm thấy tại vị trí mặc định: {resolved}")
             return resolved
 
-        # 3. Steam registry (Steam App ID)
-        path = self._find_via_steam_registry()
-        if path:
-            return path
-
-        # 4. Windows Uninstall registry
+        # 3. Windows Uninstall registry
         path = self._find_via_uninstall_registry()
         if path:
             return path
 
-        # 5. Scan all drives
+        # 5. Linux common paths
+        from utils import is_linux
+        if is_linux():
+            path = self._find_via_linux_paths()
+            if path:
+                return path
+
+        # 6. Scan all drives
         path = self._find_in_all_drives()
         if path:
             return path
@@ -117,22 +127,17 @@ class FilePatcher:
         self._log("⚠ Không tìm thấy thư mục game tự động.")
         return None
 
-    def _find_via_steam_registry(self) -> Optional[str]:
-        steam_app_id = self.settings.get("steam_app_id", "").strip()
-        if not steam_app_id:
-            return None
-        try:
-            key_path = (
-                rf"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App {steam_app_id}"
-            )
-            with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, key_path) as key:
-                install_location, _ = winreg.QueryValueEx(key, "InstallLocation")
-                resolved = self._resolve_win64_path(install_location)
+    def _find_via_linux_paths(self) -> Optional[str]:
+        for base in _LINUX_GAME_PATHS:
+            full_base = os.path.expanduser(base)
+            if not os.path.isdir(full_base):
+                continue
+            for name in _GAME_FOLDER_NAMES:
+                root = os.path.join(full_base, name)
+                resolved = self._resolve_win64_path(root)
                 if resolved:
-                    self._log(f"✔ Tìm thấy qua Steam registry: {resolved}")
+                    self._log(f"✔ Tìm thấy tại: {resolved}")
                     return resolved
-        except (OSError, FileNotFoundError):
-            pass
         return None
 
     def _find_in_all_drives(self) -> Optional[str]:
@@ -142,8 +147,6 @@ class FilePatcher:
             "Games",
             "Program Files",
             "Program Files (x86)",
-            "SteamLibrary\\steamapps\\common",
-            "Steam\\steamapps\\common",
         ]
         
         for d in string.ascii_uppercase:
@@ -168,6 +171,10 @@ class FilePatcher:
         return None
 
     def _find_via_uninstall_registry(self) -> Optional[str]:
+        from utils import is_windows
+        if not is_windows():
+            return None
+        import winreg
         search_bases = [
             (
                 winreg.HKEY_LOCAL_MACHINE,
@@ -224,7 +231,16 @@ class FilePatcher:
         if os.path.exists(v_file):
             try:
                 with open(v_file, "r", encoding="utf-8") as f:
-                    return json.load(f)
+                    data = json.load(f)
+                
+                # Check if the listed files actually exist in the game folder
+                files = data.get("files", [])
+                if files:
+                    for fname in files:
+                        if not os.path.exists(os.path.join(win64_path, fname)):
+                            return None
+                            
+                return data
             except Exception:
                 pass
                 
